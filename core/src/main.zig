@@ -49,10 +49,10 @@ pub fn main() !void {
                 \\OMNI is designed to be used as a filter in your agentic pipelines.
                 \\
             ;
-            try std.io.getStdOut().writer().print("{s}", .{help_text});
+            try std.fs.File.stdout().deprecatedWriter().print("{s}", .{help_text});
             return;
         } else if (std.mem.eql(u8, cmd, "-v") or std.mem.eql(u8, cmd, "--version") or std.mem.eql(u8, cmd, "version")) {
-            try std.io.getStdOut().writer().print("OMNI Core v0.1.0 (Zig)\n", .{});
+            try std.fs.File.stdout().deprecatedWriter().print("OMNI Core v0.1.0 (Zig)\n", .{});
             return;
         }
     }
@@ -61,7 +61,7 @@ pub fn main() !void {
     var stdin_file = std.fs.File.stdin();
     const input = stdin_file.readToEndAlloc(allocator, 1024 * 1024 * 10) catch |err| {
         if (err == error.EndOfStream) {
-            try std.io.getStdErr().writer().print("Error: No input provided via stdin.\nUse 'omni --help' for usage.\n", .{});
+            try std.fs.File.stderr().deprecatedWriter().print("Error: No input provided via stdin.\nUse 'omni --help' for usage.\n", .{});
             std.process.exit(1);
         }
         return err;
@@ -69,14 +69,14 @@ pub fn main() !void {
     defer allocator.free(input);
 
     if (input.len == 0) {
-        try std.io.getStdErr().writer().print("Error: Empty input provided via stdin.\n", .{});
+        try std.fs.File.stderr().deprecatedWriter().print("Error: Empty input provided via stdin.\n", .{});
         std.process.exit(1);
     }
 
     const compressed = try compressor.compress(allocator, input, filters.items);
     defer allocator.free(compressed);
     
-    try std.io.getStdOut().writer().print("{s}\n", .{compressed});
+    try std.fs.File.stdout().deprecatedWriter().print("{s}\n", .{compressed});
 }
 
 test "compressor integration" {
