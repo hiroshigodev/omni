@@ -6,7 +6,7 @@
 set -e
 
 REPO="fajarhide/omni"
-INSTALL_DIR="${OMNI_INSTALL_DIR:-$HOME/omni}"
+INSTALL_DIR="${OMNI_INSTALL_DIR:-$HOME/.omni}"
 
 # Colors
 BLUE='\033[0;34m'

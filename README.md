@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="brand-logo.png" alt="OMNI - The Semantic Core" width="300" />
+  <img src="logo.png" alt="OMNI - The Semantic Core" width="300" />
 </p>
 
 <h1 align="center">OMNI: The Semantic Core for the Agentic Era</h1>
@@ -116,16 +116,39 @@ That's **98% fewer tokens**. The LLM gets the same signal â€” all builds pass â€
 
 OMNI is a standard **Model Context Protocol (MCP)** server.
 
-### Claude Code & Antigravity
+### Claude Code & Claude CLI
 The OMNI CLI is for humans, but **`omni-mcp`** is for your AI. It allows Claude or Antigravity to use OMNI's distillation tools automatically.
 
-To connect OMNI to Claude Code:
+To register OMNI as an MCP server for Claude Code:
 ```bash
-claude config add mcp omni omni-mcp
+claude mcp add-json omni '{"type":"stdio","command":"node","args":["$HOME/.omni/dist/index.js"]}'
 ```
 
-> [!NOTE]
-> When starting, you might see an `ExperimentalWarning: WASI`. This is expected! OMNI uses high-performance WebAssembly (WASI) at its core, which Node.js currently labels as experimental. It is completely safe to use.
+Verify with:
+```bash
+claude mcp list
+```
+
+### Antigravity (Google)
+Add this to `~/.gemini/antigravity/mcp_config.json`:
+```json
+{
+  "mcpServers": {
+    "omni": {
+      "command": "node",
+      "args": ["$HOME/.omni/dist/index.js"]
+    }
+  }
+}
+```
+
+### Auto-Generate Config
+Use the CLI to generate ready-to-paste configurations:
+```bash
+omni generate claude-code    # For Claude Code / Claude CLI
+omni generate antigravity     # For Google Antigravity
+omni setup                    # Full interactive guide
+```
 
 ---
 

@@ -182,59 +182,140 @@ fn handleGenerate(agent: []const u8) !void {
     const stdout = std.fs.File.stdout().deprecatedWriter();
     if (std.mem.eql(u8, agent, "claude-code")) {
         try stdout.print(
-            \\# OMNI Template for Claude Code
-            \\# Use this to distill your context before sending to Claude
-            \\---
-            \\project: my-awesome-app
-            \\focus: semantic-purity
-            \\---
-            \\[PASTE YOUR VERBOSE LOGS/DIFFS HERE]
+            \\# ─── OMNI MCP Config for Claude Code ───
+            \\#
+            \\# Run this command to register OMNI as an MCP server:
+            \\
+            \\claude mcp add-json omni '{{"type":"stdio","command":"node","args":["$HOME/.omni/dist/index.js"]}}'
+            \\
+            \\# Or if you installed OMNI to a custom path:
+            \\# claude mcp add-json omni '{{"type":"stdio","command":"node","args":["/your/path/to/omni/dist/index.js"]}}'
+            \\#
+            \\# Verify:
+            \\#   claude mcp list
             \\
         , .{});
     } else if (std.mem.eql(u8, agent, "antigravity")) {
         try stdout.print(
-            \\# OMNI Template for Antigravity
-            \\# Optimized for high-density semantic streams
+            \\# ─── OMNI MCP Config for Antigravity ───
+            \\#
+            \\# Add this to your ~/.gemini/antigravity/mcp_config.json:
+            \\
             \\{{
-            \\  "agent": "antigravity",
-            \\  "mode": "distill",
-            \\  "content": "[PASTE CONTENT HERE]"
+            \\  "mcpServers": {{
+            \\    "omni": {{
+            \\      "command": "node",
+            \\      "args": ["$HOME/.omni/dist/index.js"]
+            \\    }}
+            \\  }}
             \\}}
+            \\
+            \\# Or if you installed OMNI to a custom path, update the args path accordingly.
+            \\#
+            \\# To apply, restart Antigravity or reload the config.
             \\
         , .{});
     } else {
         try stdout.print(
-            \\# OMNI General Template
-            \\---
-            \\# Distill any verbose output:
-            \\# cat your_output.log | omni
+            \\# ─── OMNI MCP Setup ───
+            \\#
+            \\# Generate a ready-to-use MCP configuration for your AI agent:
+            \\#
+            \\#   omni generate claude-code     → Claude Code / Claude CLI
+            \\#   omni generate antigravity      → Google Antigravity
+            \\#
+            \\# Or run the full interactive setup guide:
+            \\#   omni setup
             \\
         , .{});
     }
 }
 
 fn handleSetup() !void {
+    if (std.posix.getenv("HOME")) |home| {
+        var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+        defer arena.deinit();
+        const alloc = arena.allocator();
+
+        const omni_dir = std.fmt.allocPrint(alloc, "{s}/.omni", .{home}) catch null;
+        const omni_dist_dir = std.fmt.allocPrint(alloc, "{s}/.omni/dist", .{home}) catch null;
+        
+        if (omni_dir != null and omni_dist_dir != null) {
+            std.fs.cwd().makeDir(omni_dir.?) catch {};
+            std.fs.cwd().makeDir(omni_dist_dir.?) catch {};
+
+            var buffer: [std.fs.max_path_bytes]u8 = undefined;
+            if (std.fs.selfExeDirPath(&buffer)) |exe_dir| {
+                const src_dist1 = std.fs.path.join(alloc, &.{ exe_dir, "..", "dist", "index.js" }) catch null;
+                const src_dist2 = std.fs.path.join(alloc, &.{ exe_dir, "..", "libexec", "dist", "index.js" }) catch null;
+                
+                var real_src_dist: ?[]const u8 = null;
+                if (src_dist1) |d1| {
+                    if (std.fs.cwd().access(d1, .{})) |_| { real_src_dist = d1; } else |_| {}
+                }
+                if (real_src_dist == null and src_dist2 != null) {
+                    if (std.fs.cwd().access(src_dist2.?, .{})) |_| { real_src_dist = src_dist2.?; } else |_| {}
+                }
+
+                if (real_src_dist != null) {
+                    const dst_dist = std.fmt.allocPrint(alloc, "{s}/index.js", .{omni_dist_dir.?}) catch null;
+                    if (dst_dist != null) {
+                        std.posix.symlink(real_src_dist.?, dst_dist.?) catch {};
+                    }
+                }
+            } else |_| {}
+        }
+    }
+
     const help_text =
-        \\🌌 OMNI SETUP & USAGE GUIDE
-        \\════════════════════════════════════════
-        \\1. Compilation:
-        \\   zig build -Doptimize=ReleaseFast
         \\
-        \\2. Binary Location:
-        \\   Your binary is at ./zig-out/bin/omni
+        \\🌌 OMNI SETUP & INTEGRATION GUIDE
+        \\══════════════════════════════════════════════════════════
         \\
-        \\3. Fast Setup (Alias):
-        \\   echo "alias omni='$(pwd)/zig-out/bin/omni'" >> ~/.zshrc
+        \\📍 Step 1: Verify Installation
+        \\   omni --version              # Should print OMNI Core vX.X.X
+        \\   omni report                 # Check engine status
         \\
-        \\4. Integration:
-        \\   # Git:
-        \\   git diff | omni
+        \\📍 Step 2: Choose Your Agent
         \\
-        \\   # Docker:
-        \\   docker build . 2>&1 | omni
+        \\   ┌─────────────────────────────────────────────────────┐
+        \\   │  CLAUDE CODE / CLAUDE CLI                           │
+        \\   │                                                     │
+        \\   │  Run:                                               │
+        \\   │  claude mcp add-json omni \                         │
+        \\   │    '{"type":"stdio","command":"node",               │
+        \\   │     "args":["$HOME/.omni/dist/index.js"]}'          │
+        \\   │                                                     │
+        \\   │  Verify: claude mcp list                            │
+        \\   └─────────────────────────────────────────────────────┘
         \\
-        \\   # SQL:
-        \\   pg_dump --schema-only mydb | omni
+        \\   ┌─────────────────────────────────────────────────────┐
+        \\   │  ANTIGRAVITY (Google)                               │
+        \\   │                                                     │
+        \\   │  Add to ~/.gemini/antigravity/mcp_config.json:      │
+        \\   │                                                     │
+        \\   │  {                                                  │
+        \\   │    "mcpServers": {                                  │
+        \\   │      "omni": {                                      │
+        \\   │        "command": "node",                           │
+        \\   │        "args": ["$HOME/.omni/dist/index.js"]        │
+        \\   │      }                                              │
+        \\   │    }                                                │
+        \\   │  }                                                  │
+        \\   └─────────────────────────────────────────────────────┘
+        \\
+        \\📍 Step 3: Generate Config Automatically
+        \\   omni generate claude-code   # Copy-paste config for Claude
+        \\   omni generate antigravity   # Copy-paste config for Antigravity
+        \\
+        \\📍 Step 4: Use OMNI Everywhere
+        \\   git diff | omni                     # Distill git output
+        \\   docker build . 2>&1 | omni          # Distill docker output
+        \\   omni density < logs.txt             # Analyze token density
+        \\   omni bench 1000                     # Benchmark performance
+        \\
+        \\══════════════════════════════════════════════════════════
+        \\OMNI is mission-ready. 🌌
         \\
     ;
     try std.fs.File.stdout().deprecatedWriter().print("{s}", .{help_text});
