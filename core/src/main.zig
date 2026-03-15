@@ -40,7 +40,7 @@ pub fn main() !void {
             try printHelp();
             return;
         } else if (std.mem.eql(u8, cmd, "-v") or std.mem.eql(u8, cmd, "--version") or std.mem.eql(u8, cmd, "version")) {
-            try std.fs.File.stdout().deprecatedWriter().print("OMNI Core v0.1.0 (Zig)\n", .{});
+            try std.fs.File.stdout().deprecatedWriter().print("OMNI Core v0.2.0 (Zig)\n", .{});
             return;
         } else if (std.mem.eql(u8, cmd, "density")) {
             try handleDensity(allocator, filters.items);
