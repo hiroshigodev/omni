@@ -11,7 +11,7 @@
 
 ---
 
-## 💎 The OMNI Brand: Efficiency Reinvented
+## The OMNI Brand: Efficiency Reinvented
 
 While others count tokens, **OMNI understands context.** In the era of autonomous agents, context is the new currency. Truncating data is a loss; OMNI's **Semantic Distillation** ensures that every token your LLM receives is pure information signal, zero noise.
 
@@ -21,7 +21,7 @@ While others count tokens, **OMNI understands context.** In the era of autonomou
 
 ---
 
-## 💻 CLI Subcommands: Unified Intelligence
+## CLI Subcommands: Unified Intelligence
 
 OMNI provides a powerful, multi-purpose CLI that consolidates all diagnostic and reporting tools:
 
@@ -36,7 +36,7 @@ OMNI provides a powerful, multi-purpose CLI that consolidates all diagnostic and
 
 ---
 
-## 🔄 How OMNI Works
+## How OMNI Works
 
 OMNI uses a **Persistent Wasm Pipeline** combined with a high-speed caching layer to eliminate token waste at sub-millisecond speeds.
 
@@ -56,7 +56,7 @@ No filter match? The command passes through unchanged — **zero overhead**.
 
 ---
 
-## ✨ The OMNI Effect
+## The OMNI Effect
 
 **Before OMNI** (LLM sees 600+ tokens of noise):
 ```
@@ -80,7 +80,7 @@ That's **98% fewer tokens**. The LLM gets the same signal — all builds pass �
 
 ---
 
-## 🔌 Integration: Using OMNI Everywhere
+## Integration: Using OMNI Everywhere
 
 OMNI is a standard **Model Context Protocol (MCP)** server.
 
@@ -97,7 +97,7 @@ claude config add mcp omni omni-mcp
 
 ---
 
-## 📊 The Power Comparison: Precise Intelligence
+## The Power Comparison: Precise Intelligence
 
 | Feature | **OMNI 🌌** | RTK 🛠️ | Snip ✂️ | Serena 🎀 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -115,7 +115,7 @@ claude config add mcp omni omni-mcp
 
 ---
 
-## 📊 Visualizing Efficiency
+## Visualizing Efficiency
 
 1.  **The "Distillation" Effect**: In your AI's tool output, raw logs are transformed into a 10-line summary.
 2.  **Faster Response Times**: LLM processes 150x fewer tokens, giving you significantly faster replies.
@@ -124,7 +124,7 @@ claude config add mcp omni omni-mcp
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### ⚡ One-Line Installer
 ```bash
@@ -135,5 +135,5 @@ For manual build instructions, see **[INSTALL.md](INSTALL.md)**.
 
 ---
 
-## 📜 License
+## License
 MIT © Fajar Hidayat
