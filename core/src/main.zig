@@ -1,4 +1,5 @@
 const std = @import("std");
+const build_options = @import("build_options");
 const compressor = @import("compressor.zig");
 const Filter = @import("filters/interface.zig").Filter;
 const GitFilter = @import("filters/git.zig").GitFilter;
@@ -40,7 +41,7 @@ pub fn main() !void {
             try printHelp();
             return;
         } else if (std.mem.eql(u8, cmd, "-v") or std.mem.eql(u8, cmd, "--version") or std.mem.eql(u8, cmd, "version")) {
-            try std.fs.File.stdout().deprecatedWriter().print("OMNI Core v0.2.0 (Zig)\n", .{});
+            try std.fs.File.stdout().deprecatedWriter().print("OMNI Core v{s} (Zig)\n", .{build_options.version});
             return;
         } else if (std.mem.eql(u8, cmd, "density")) {
             try handleDensity(allocator, filters.items);

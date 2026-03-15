@@ -12,9 +12,9 @@ class Omni < Formula
     # Run builds from the 'core' directory
     Dir.chdir("core") do
       # Native binary -> bin/omni
-      system "zig", "build", "-Doptimize=ReleaseFast", "-p", "../"
+      system "zig", "build", "-Doptimize=ReleaseFast", "-Dversion=#{version}", "-p", "../"
       # Wasm binary -> bin/omni-wasm.wasm
-      system "zig", "build", "wasm", "-Doptimize=ReleaseSmall", "-p", "../"
+      system "zig", "build", "wasm", "-Doptimize=ReleaseSmall", "-Dversion=#{version}", "-p", "../"
     end
 
     # Install Native Binary
