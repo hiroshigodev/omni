@@ -1,0 +1,24 @@
+name: Feature Request
+description: Suggest an idea for OMNI (e.g., a new semantic filter).
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Feature Idea
+      description: What would you like OMNI to do?
+      placeholder: I want a filter for...
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is this needed?
+      description: What is the token-savings impact or use-case?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you tried other ways to achieve this?

@@ -1,0 +1,31 @@
+# --- Dependencies ---
+node_modules/
+.zig-cache/
+
+# --- Build Outputs ---
+dist/
+zig-out/
+core/omni
+core/omni-wasm.wasm
+core/*.o
+*.wasm
+*.o
+
+# --- Logs & Temporary Files ---
+*.log
+actual_stdout.txt
+test-*.js
+
+# --- Environment & Configuration ---
+.env
+.env.*
+! .env.example
+core/omni_config.json
+
+# --- OS & IDE Specific ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

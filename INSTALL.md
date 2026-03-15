@@ -1,0 +1,82 @@
+# Installing OMNI 🌌
+
+OMNI is designed to be installed locally and integrated into your MCP environment.
+
+## 🚀 One-Line Installation (Universal)
+
+If you have **Zig 0.15.2** and **Node.js 18+** installed, you can set up OMNI in one step:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/fajarhide/omni/main/install.sh | sh
+```
+
+## 🍺 Homebrew (Beta)
+
+If you use macOS or Linux with Homebrew, you can install OMNI via a custom tap:
+
+1. **Tap the repository**:
+   ```bash
+   brew tap fajarhide/omni
+   ```
+
+2. **Install**:
+   ```bash
+   brew install omni
+   ```
+
+*(Note: Official Homebrew support is currently in setup phase via `omni.rb`).*
+
+## 🛠 Manual Installation
+
+If you prefer to install manually:
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/fajarhide/omni.git
+   cd omni
+   ```
+
+2. **Run the Deployment Script**:
+   This script builds the native core, Wasm core, and the MCP gateway.
+   ```bash
+   ./scripts/omni-deploy-edge.sh
+   ```
+
+3. **Verify the Installation**:
+   ```bash
+   ./scripts/omni-report.sh
+   ```
+
+## 🔌 Integration with AI Agents
+
+OMNI is compatible with any tool that supports the **Model Context Protocol (MCP)**.
+
+### Claude Code / Antigravity
+Add to `~/.claude/config.json`:
+```json
+{
+  "mcpServers": {
+    "omni": {
+      "command": "node",
+      "args": ["/path/to/omni/dist/index.js"]
+    }
+  }
+}
+```
+
+### Cursor / Windsurf / VS Code Agents
+1. Go to **Settings** or **MCP Configuration**.
+2. Add a new server with the following details:
+   - **Name**: `omni`
+   - **Type**: `stdio` or `command`
+   - **Command**: `node`
+   - **Arguments**: `["/path/to/omni/dist/index.js"]`
+
+### Generic MCP Agents
+For any other agent, ensure the `node` environment is available and point the transport to OMNI's entry point: `/path/to/omni/dist/index.js`.
+
+## 📦 Dependencies
+
+- **Zig 0.15.2+**: Required for the high-performance core.
+- **Node.js 18+**: Required for the MCP gateway.
+- **Git**: Required for the installer script.

@@ -1,0 +1,44 @@
+name: Bug Report
+description: Create a report to help us improve OMNI.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the issue here...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: How did you encounter this bug?
+      placeholder: |
+        1. Run 'omni ...'
+        2. See error...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+  - type: input
+    id: context
+    attributes:
+      label: Context
+      description: OS, Zig version, Node version.
+      placeholder: e.g., macOS Sonoma, Zig 0.15.2, Node 20.10
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant Logs
+      description: Please paste any relevant logs or output here.

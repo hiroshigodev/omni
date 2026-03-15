@@ -1,0 +1,53 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Zig
+      uses: mlugg/setup-zig@v1
+      with:
+        version: 0.15.2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Build Native Binary
+      run: |
+        cd core
+        zig build-exe src/main.zig -O ReleaseSmall --name omni
+
+    - name: Build Wasm Core
+      run: |
+        cd core
+        zig build-exe src/wasm.zig -target wasm32-wasi -O ReleaseSmall -rdynamic --name omni-wasm
+
+    - name: Package Release
+      run: |
+        mkdir -p release
+        cp core/omni release/
+        cp core/omni-wasm.wasm release/
+        cp install.sh release/
+        tar -czf omni-assets.tar.gz -C release .
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          omni-assets.tar.gz
+          core/omni-wasm.wasm
+        generate_release_notes: true
+        draft: false
+        prerelease: false
