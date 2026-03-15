@@ -25,12 +25,10 @@ class Omni < Formula
     (bin/"omni-mcp").write <<~EOS
       #!/bin/bash
       export OMNI_WASM_PATH="#{lib}/omni/omni-wasm.wasm"
-      node "#{prefix}/libexec/dist/index.js" "$@"
+      node "#{libexec}/dist/index.js" "$@"
     EOS
     
-    libexec.install Dir["dist/*"]
-    libexec.install "package.json"
-    libexec.install "node_modules"
+    libexec.install "dist", "package.json", "node_modules"
   end
 
   test do
