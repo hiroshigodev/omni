@@ -15,7 +15,7 @@ class Omni < Formula
 
     # Build Wasm Binary
     system "zig", "build-exe", "core/src/wasm.zig", "-target", "wasm32-wasi", "-O", "ReleaseSmall", "-rdynamic", "--name", "omni-wasm"
-    (lib/"omni").install "core/omni-wasm.wasm"
+    (lib/"omni").install "omni-wasm.wasm"
 
     # Install MCP Server
     system "npm", "install"
