@@ -44,21 +44,43 @@ OMNI provides a powerful, multi-purpose CLI that consolidates all diagnostic and
 
 ## How OMNI Works
 
-OMNI uses a **Persistent Wasm Pipeline** combined with a high-speed caching layer to eliminate token waste at sub-millisecond speeds.
+OMNI sits between your AI agent and the outside world — silently distilling chaotic output into pure, high-density signal.
 
 ```
-┌─────────────┐      ┌─────────────────┐      ┌──────────────┐      ┌────────────┐
-│ AI Agent    │─────>│ OMNI Intercept  │─────>│ LRU Cache    │─────>│ Semantic   │
-│ (Claude)    │      │ (MCP Server)    │      │ (Sub-ms Hit) │      │ Distiller  │
-└─────────────┘      └─────────────────┘      └──────────────┘      └─────┬──────┘
-                                                                          │
-                     ┌─────────────────┐      ┌──────────────┐            │
-                     │   AI Agent      │<─────│ Track Token  │<───────────┘
-                     │  sees signal    │      │   Savings    │
-                     └─────────────────┘      └──────────────┘
-```
+                         OMNI SEMANTIC PIPELINE
+  ─────────────────────────────────────────────────────────────
 
-No filter match? The command passes through unchanged — **zero overhead**.
+   Your Tool Output
+  ┌──────────────────┐
+  │  git diff        │   (noisy, verbose, 600+ tokens)
+  │  docker build    │
+  │  npm install     │
+  └────────┬─────────┘
+           │ stdin pipe
+           ▼
+  ┌──────────────────────────────────────────────────────────┐
+  │                    OMNI MCP SERVER                        │
+  │                                                          │
+  │   ┌─────────────┐     ┌────────────────────────────┐    │
+  │   │ LRU Cache   │────▶│  Filter Engine (Zig + Wasm) │   │
+  │   │  < 1ms hit  │     │  Git · SQL · Docker · Node  │   │
+  │   └─────────────┘     └────────────┬───────────────┘    │
+  │                                    │ Semantic Distill    │
+  │             ┌──────────────────────▼──────────────────┐  │
+  │             │  Pure Signal  (30–90% token reduction)   │  │
+  │             └──────────────────────┬──────────────────┘  │
+  └──────────────────────────────────  │ ─────────────────────┘
+                                       │
+                                       ▼
+                          ┌────────────────────────┐
+                          │   AI Agent (Claude)     │
+                          │   sees only signal,     │
+                          │   zero noise            │
+                          └────────────────────────┘
+
+  No filter match → passthrough unchanged (zero overhead)
+  ─────────────────────────────────────────────────────────────
+```
 
 ---
 
