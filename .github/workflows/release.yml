@@ -3,51 +3,66 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   release:
+    name: Build Release Binaries
     runs-on: ubuntu-latest
+
     permissions:
       contents: write
 
+    strategy:
+      matrix:
+        target:
+          - x86_64-linux
+          - aarch64-linux
+          - x86_64-macos
+          - aarch64-macos
+
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup Zig
-      uses: mlugg/setup-zig@v1
-      with:
-        version: master
+      - name: Setup Zig
+        uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.15.2
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-    - name: Build Native Binary
-      run: |
-        cd core
-        zig build -Doptimize=ReleaseFast -Dversion=${{ github.ref_name }} -p ../
+      - name: Build Native Binary
+        run: |
+          cd core
+          zig build \
+            -Dtarget=${{ matrix.target }} \
+            -Doptimize=ReleaseFast \
+            -Dversion=${{ github.ref_name }} \
+            -p ../
 
-    - name: Build Wasm Core
-      run: |
-        cd core
-        zig build wasm -Doptimize=ReleaseSmall -Dversion=${{ github.ref_name }} -p ../
+      - name: Build WASM
+        run: |
+          cd core
+          zig build wasm \
+            -Doptimize=ReleaseSmall \
+            -Dversion=${{ github.ref_name }} \
+            -p ../
 
-    - name: Package Release
-      run: |
-        mkdir -p release
-        cp core/omni release/
-        cp core/omni-wasm.wasm release/
-        cp install.sh release/
-        tar -czf omni-assets.tar.gz -C release .
+      - name: Package Release
+        run: |
+          mkdir -p release
+          cp core/omni release/omni-${{ matrix.target }}
+          cp core/omni-wasm.wasm release/
 
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2
-      with:
-        files: |
-          omni-assets.tar.gz
-          core/omni-wasm.wasm
-        generate_release_notes: true
-        draft: false
-        prerelease: false
+          tar -czf omni-${{ matrix.target }}.tar.gz -C release .
+
+      - name: Upload Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            omni-${{ matrix.target }}.tar.gz
+            core/omni-wasm.wasm
+          generate_release_notes: true
