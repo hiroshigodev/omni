@@ -1,5 +1,11 @@
 # OMNI: The Semantic Core for the Agentic Era 🌌
 
+<p align="center">
+  <a href="https://github.com/fajarhide/omni/actions"><img src="https://github.com/fajarhide/omni/workflows/CI/badge.svg" alt="CI"></a>
+  <a href="https://github.com/fajarhide/omni/releases"><img src="https://img.shields.io/github/v/release/fajarhide/omni" alt="Release"></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+</p>
+
 > **Stop Truncating. Start Distilling.**  
 > OMNI (Optimization Middleware & Next-gen Interface) is a hyper-performance distillation engine that transforms chaotic data into pure, high-density intelligence for LLMs.
 
