@@ -246,5 +246,6 @@ test "compressor integration" {
     const filters = [_]Filter{GitFilter.filter()};
     const result = try compressor.compress(gpa, input, &filters);
     defer gpa.free(result);
-    try std.testing.expect(std.mem.indexOf(u8, result, "git: on branch main") != null);
+    // Git filter now outputs compact summary format: "git: on <branch> | ..."
+    try std.testing.expect(std.mem.indexOf(u8, result, "git: on main") != null);
 }
