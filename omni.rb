@@ -24,10 +24,12 @@ class Omni < Formula
     (lib/"omni").install "bin/omni-wasm.wasm"
 
     # Install MCP Server
+    # Use plain local npm install so devDeps (typescript/tsc) are available for build
     libexec.install "package.json", "src"
     cd libexec do
-      system "npm", "install", *std_npm_args
-      system "npm", "run", "build"
+      system "npm", "install"
+      system "./node_modules/.bin/tsc"
+      system "npm", "prune", "--omit=dev"
     end
     # Create a wrapper for the MCP server
     (bin/"omni-mcp").write <<~EOS
