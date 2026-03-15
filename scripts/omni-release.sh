@@ -13,7 +13,7 @@ fi
 VERSION=$1
 TAG="v$VERSION"
 REPO="fajarhide/omni"
-TAP_REPO_PATH="../homebrew-omni" # Default assumption
+TAP_REPO_PATH="../homebrew-tap/Formula" # Default assumption
 
 echo "🌌 Preparing OMNI $VERSION release..."
 

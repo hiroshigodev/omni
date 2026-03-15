@@ -10,19 +10,13 @@ If you have **Zig 0.15.2** and **Node.js 18+** installed, you can set up OMNI in
 curl -fsSL https://raw.githubusercontent.com/fajarhide/omni/main/install.sh | sh
 ```
 
-## 🍺 Homebrew
+## Homebrew
 
-If you use macOS or Linux with Homebrew, you can install OMNI via the official tap:
+Install OMNI via Homebrew:
 
-1. **Tap the repository**:
-   ```bash
-   brew tap fajarhide/omni
-   ```
-
-2. **Install**:
-   ```bash
-   brew install omni
-   ```
+```bash
+brew install fajarhide/tap/omni
+```
 
 ## 🛠 Manual Installation
 

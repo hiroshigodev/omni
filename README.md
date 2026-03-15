@@ -132,7 +132,12 @@ claude config add mcp omni omni-mcp
 
 ## Installation
 
-### ⚡ One-Line Installer
+### Homebrew (Recommended)
+```bash
+brew install fajarhide/tap/omni
+```
+
+### One-Line Installer
 ```bash
 curl -fsSL https://raw.githubusercontent.com/fajarhide/omni/main/install.sh | sh
 ```
