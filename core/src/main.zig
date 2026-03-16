@@ -76,6 +76,14 @@ pub fn main() !void {
         } else if (std.mem.eql(u8, cmd, "uninstall")) {
             try handleUninstall(allocator);
             return;
+        } else if (std.mem.eql(u8, cmd, "examples")) {
+            try handleExamples();
+            return;
+        } else if (std.mem.eql(u8, cmd, "--")) {
+            if (args.len > 2) {
+                try handleProxy(allocator, args[2..], filters.items);
+                return;
+            }
         }
     }
 
@@ -99,6 +107,7 @@ fn printHelp() !void {
         \\  setup            Show detailed setup and usage instructions
         \\  update           Check for the latest version from GitHub
         \\  uninstall        Remove OMNI and clean up all configurations
+        \\  examples         Show real-world study cases and examples
         \\
         \\Examples:
         \\  cat log.txt | omni
@@ -109,6 +118,46 @@ fn printHelp() !void {
         \\
     ;
     try std.fs.File.stdout().deprecatedWriter().print("{s}", .{help_text});
+}
+
+fn handleExamples() !void {
+    const stdout = std.fs.File.stdout().deprecatedWriter();
+    const examples_text =
+        \\
+        \\📚 OMNI STUDY CASES & EXAMPLES
+        \\══════════════════════════════════════════════════════════
+        \\
+        \\🔍 1. Git & Code Review
+        \\   git diff | omni                     # Clean diff for LLM
+        \\   git log -n 5 | omni                 # Dense commit history
+        \\   git show HEAD | omni                # Distill single commit noise
+        \\
+        \\🐳 2. Containers & Infrastructure
+        \\   docker build . 2>&1 | omni          # Distill layer cache & noise
+        \\   docker logs <id> | omni             # Semantic log summary
+        \\   terraform plan | omni               # Show only infra changes
+        \\   kubectl describe pod <p> | omni     # Distill k8s pod noise
+        \\
+        \\📦 3. Build & Dependency Management
+        \\   npm install | omni                  # Clean dependency logs
+        \\   zig build --summary all | omni      # Distill build step noise
+        \\   cargo build 2>&1 | omni             # Rust build distillation
+        \\
+        \\📊 4. Database & Queries
+        \\   cat dump.sql | omni                 # Distill SQL schema noise
+        \\   omni density < logs.txt             # Measure token efficiency
+        \\
+        \\🤖 5. Agentic Workflows
+        \\   omni generate claude-code           # Setup for Claude Code
+        \\   omni generate antigravity            # Setup for Antigravity
+        \\
+        \\💡 Tip: OMNI automatically detects the context and applies 
+        \\   the right semantic filter for the highest density!
+        \\
+        \\══════════════════════════════════════════════════════════
+        \\
+    ;
+    try stdout.print("{s}", .{examples_text});
 }
 
 fn handleDistill(allocator: std.mem.Allocator, filters: []const Filter) !void {
@@ -151,6 +200,33 @@ fn logTelemetry(allocator: std.mem.Allocator, agent: []const u8, input_len: usiz
     const line = try std.fmt.allocPrint(allocator, "{d},{s},{d},{d},{d}\n", .{ ts, agent, input_len, output_len, ms });
     defer allocator.free(line);
     try file.writeAll(line);
+}
+
+fn handleProxy(allocator: std.mem.Allocator, cmd_args: []const [:0]u8, filters: []const Filter) !void {
+    var child = std.process.Child.init(cmd_args, allocator);
+    child.stdout_behavior = .Pipe;
+    child.stderr_behavior = .Pipe;
+
+    try child.spawn();
+
+    const stdout_data = try child.stdout.?.readToEndAlloc(allocator, 10 * 1024 * 1024);
+    const stderr_data = try child.stderr.?.readToEndAlloc(allocator, 10 * 1024 * 1014);
+    defer allocator.free(stdout_data);
+    defer allocator.free(stderr_data);
+
+    _ = try child.wait();
+
+    if (stdout_data.len > 0) {
+        const distilled = try compressor.compress(allocator, stdout_data, filters);
+        defer allocator.free(distilled);
+        try std.fs.File.stdout().deprecatedWriter().print("{s}\n", .{distilled});
+    }
+
+    if (stderr_data.len > 0) {
+        const distilled_err = try compressor.compress(allocator, stderr_data, filters);
+        defer allocator.free(distilled_err);
+        try std.fs.File.stderr().deprecatedWriter().print("{s}\n", .{distilled_err});
+    }
 }
 
 fn handleDensity(allocator: std.mem.Allocator, filters: []const Filter) !void {
