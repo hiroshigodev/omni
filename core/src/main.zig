@@ -73,6 +73,9 @@ pub fn main() !void {
         } else if (std.mem.eql(u8, cmd, "update")) {
             try handleUpdate(allocator);
             return;
+        } else if (std.mem.eql(u8, cmd, "uninstall")) {
+            try handleUninstall(allocator);
+            return;
         }
     }
 
@@ -82,7 +85,7 @@ pub fn main() !void {
 
 fn printHelp() !void {
     const help_text =
-        \\OMNI Native Core - Semantic Distillation Engine 🌌
+        \\OMNI Native Core - Semantic Distillation Engine
         \\
         \\Usage:
         \\  omni [subcommand] [options]
@@ -95,6 +98,7 @@ fn printHelp() !void {
         \\  generate [agent] Generate template input_file for AI agents
         \\  setup            Show detailed setup and usage instructions
         \\  update           Check for the latest version from GitHub
+        \\  uninstall        Remove OMNI and clean up all configurations
         \\
         \\Examples:
         \\  cat log.txt | omni
@@ -609,7 +613,7 @@ fn handleSetup() !void {
         \\   omni bench 1000                     # Benchmark performance
         \\
         \\══════════════════════════════════════════════════════════
-        \\OMNI is mission-ready. 🌌
+        \\OMNI is mission-ready.
         \\
     ;
     try std.fs.File.stdout().deprecatedWriter().print("{s}", .{help_text});
@@ -664,6 +668,74 @@ fn handleUpdate(allocator: std.mem.Allocator) !void {
         try std.fs.File.stderr().deprecatedWriter().print("Error: Could not find version tag in GitHub response.\n", .{});
     }
 }
+
+fn handleUninstall(allocator: std.mem.Allocator) !void {
+    const home = std.posix.getenv("HOME") orelse {
+        try std.fs.File.stderr().deprecatedWriter().print("Error: HOME environment variable not set.\n", .{});
+        return;
+    };
+
+    try std.fs.File.stdout().deprecatedWriter().print("\xf0\x9f\x8c\x8c Starting OMNI Uninstall...\n", .{});
+
+    // 1. Clean up known Agent MCP Configs using Node.js (guaranteed available)
+    const agent_configs = [_]struct { rel: []const u8, label: []const u8 }{
+        .{ .rel = ".gemini/antigravity/mcp_config.json", .label = "Antigravity (Google)" },
+        .{ .rel = ".claude/mcp_config.json", .label = "Claude Code CLI" },
+        .{ .rel = "Library/Application Support/Claude/claude_desktop_config.json", .label = "Claude Desktop" },
+    };
+
+    for (agent_configs) |cfg| {
+        const full_path = std.fs.path.join(allocator, &.{ home, cfg.rel }) catch continue;
+        defer allocator.free(full_path);
+
+        // Check if file exists and contains "omni"
+        const file_content = blk: {
+            const f = std.fs.openFileAbsolute(full_path, .{}) catch continue;
+            defer f.close();
+            break :blk f.readToEndAlloc(allocator, 1024 * 1024) catch continue;
+        };
+        defer allocator.free(file_content);
+
+        if (std.mem.indexOf(u8, file_content, "\"omni\"") == null) continue;
+
+        // Use node to safely remove the "omni" key from mcpServers
+        const node_script = std.fmt.allocPrint(allocator,
+            \\const fs=require('fs');
+            \\try{{const p='{s}';const c=JSON.parse(fs.readFileSync(p,'utf8'));
+            \\if(c.mcpServers&&c.mcpServers.omni){{delete c.mcpServers.omni;
+            \\fs.writeFileSync(p,JSON.stringify(c,null,2)+'\n');
+            \\process.stdout.write('ok')}}}}catch(e){{}}
+        , .{full_path}) catch continue;
+        defer allocator.free(node_script);
+
+        const result = std.process.Child.run(.{
+            .allocator = allocator,
+            .argv = &.{ "node", "-e", node_script },
+        }) catch continue;
+        defer allocator.free(result.stdout);
+        defer allocator.free(result.stderr);
+
+        if (std.mem.eql(u8, result.stdout, "ok")) {
+            try std.fs.File.stdout().deprecatedWriter().print("\xe2\x9c\x85 Removed 'omni' from {s}\n", .{cfg.label});
+        }
+    }
+
+    // 2. Remove ~/.omni directory
+    const omni_dir = std.fs.path.join(allocator, &.{ home, ".omni" }) catch null;
+    if (omni_dir) |dir| {
+        defer allocator.free(dir);
+        std.fs.deleteTreeAbsolute(dir) catch |err| {
+            if (err != error.FileNotFound) {
+                try std.fs.File.stderr().deprecatedWriter().print("Warn: Failed to delete {s} ({any})\n", .{ dir, err });
+            }
+        };
+        try std.fs.File.stdout().deprecatedWriter().print("\xe2\x9c\x85 Cleaned up ~/.omni directory\n", .{});
+    }
+
+    try std.fs.File.stdout().deprecatedWriter().print("\n\xe2\x9c\xa8 OMNI has been successfully uninstalled.\n", .{});
+    try std.fs.File.stdout().deprecatedWriter().print("Note: If you installed via Homebrew, also run: brew uninstall omni\n", .{});
+}
+
 
 test "compressor integration" {
     const gpa = std.testing.allocator;
