@@ -19,15 +19,17 @@ We love your contributions! OMNI is built on a mission to make context usage as 
    - Create a fresh branch from `main`.
    - Ensure your code follows `zig fmt` and `npm run lint` (if applicable).
    - Write tests for new filters and run `zig build test`.
-   - Update `CHANGELOG.md` with your changes.
+   - Update `[docs/CHANGELOG.md](docs/CHANGELOG.md)` with your changes.
 
 ## Development Core
 
 Before modifying the core, please read:
 - [DEVELOPMENT.md](docs/DEVELOPMENT.md)
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- [ROADMAP.md](docs/ROADMAP.md)
 
 ## Code of Conduct
 
 Be kind, respect the semantic integrity of the project, and help us build the most efficient engine for the AI era.
 
-Thank you for contributing! 🚀
+Thank you for contributing! 

@@ -29,5 +29,5 @@ else
     exit 1
 fi
 
-echo -e "\n${GREEN}🚀 OMNI is ready for Edge Deployment!${NC}"
+echo -e "\n${GREEN} OMNI is ready for Edge Deployment!${NC}"
 echo "Run 'bin/omni report' to verify system health."

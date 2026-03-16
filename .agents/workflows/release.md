@@ -40,5 +40,5 @@ Follow these steps to ensure a complete and consistent release of OMNI:
 6. **Post-Release Check**:
    Wait a few minutes and verify the installation:
    ```bash
-   brew update && brew upgrade omni && omni version
+   brew update && brew upgrade fajarhide/tap/omni && omni version
    ```

@@ -1,5 +1,5 @@
 #!/bin/bash
-# OMNI Release Master 🚀
+# OMNI Release Master 
 # Automates: Tagging, Pushing, SHA256 Calculation, and Formula Update
 
 set -e
@@ -86,5 +86,5 @@ git add omni.rb
 git commit -m "chore: update formula SHA256 for $VERSION"
 git push origin main
 
-echo "🚀 OMNI $VERSION is live!"
+echo " OMNI $VERSION is live!"
 echo "Check: https://github.com/$REPO/releases"

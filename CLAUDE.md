@@ -33,7 +33,6 @@ This file provides guidance to Claude Code when working in the **OMNI** reposito
 - `core/` - Zig engine core & filters
 - `src/` - MCP server implementation & LRU cache
 - `docs/` - Project documentation
-- `scripts/legacy/` - Deprecated shell scripts (functionality moved to CLI)
 
 ## Design Principles
 1. **Efficiency:** Minimal startup time (<1ms via Wasm & LRU cache). 

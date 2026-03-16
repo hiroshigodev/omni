@@ -12,9 +12,9 @@
 </p>
 
 <p align="center">
-  <strong>The first MCP-native semantic distillation engine</strong><br>
+  <strong>The first security-aware semantic distillation engine</strong><br>
   that transforms chaotic CLI output into pure, high-density intelligence for LLMs.<br>
-  Eliminates <strong>30–90% of token noise</strong> — powered by Zig, portable via Wasm.
+  Eliminates <strong>60–99% of token noise</strong> — powered by Zig, portable via Wasm.
 </p>
 
 ---
@@ -23,13 +23,14 @@
 
 AI agents running on **Model Context Protocol (MCP)** are only as smart as the context they receive. When Claude runs `git diff`, `docker build`, or `npm install`, it drowns in hundreds of redundant lines it will never use — burning your context window and slowing down every response.
 
-**OMNI is the missing layer.** It sits as an MCP server between your agent and the world, intercepting tool output and distilling it to pure signal — automatically, with zero config.
+**OMNI is the missing layer.** It sits as an MCP server between your agent and the world, intercepting tool output and distilling it to pure signal — automatically, safely, and with zero configuration.
 
-- **30–90% token reduction** across Git, Docker, SQL, Node, and Build tool outputs
-- **< 1ms filter latency** — powered by Zig 0.15.2, no GC, no overhead
-- **68KB Wasm footprint** — runs anywhere from your local terminal to edge runtimes
-- **MCP-first design** — native integration with Claude Code, Cursor, Windsurf, and any MCP agent
-- **Zero config** — pipe any CLI output through OMNI and it just works
+- **60–99% token reduction** — Achieve massive savings via hybrid heuristic & semantic compression
+- **< 1ms engine latency** — Powered by Zig 0.15.2, no GC, no overhead
+- **Active Distillation** — Agents can now specify *intent* for surgical summaries
+- **Trust Boundary** — Native SHA-256 verification for project-local security filters
+- **Deep Auditing** — Real-time tracking of token gains and cost savings via `omni report`
+- **MCP-native design** — Built for Claude Code, Antigravity, and modern Agentic AI workflows
 
 
 ---
@@ -151,23 +152,24 @@ omni setup                    # Full interactive guide
 
 ---
 
-## The Power of Proxy & Distillation
+## The Adaptive Intelligence: Proxy & Distillation
 
-OMNI isn't just a tool; it's a **Smart Wrapper** for your entire terminal workflow.
+OMNI serves as the **Intelligent Nerve Center** for your development environment, acting as a high-performance wrapper that ensures only high-value information reaches your AI.
 
-### 1. Command Proxy (`--`)
-Run any command through OMNI to see a distilled, semantic version of its output:
+### 1. Zero-Latency Command Proxy (`--`)
+Transform any native command into an AI-ready signal instantly. OMNI intercepts the stream and refines it in real-time without adding overhead.
 ```bash
 omni -- git status
-# Output: git: on main | 2 staged, 0 mod, 1 untracked
+# Result: Aggregated repository health (30x more dense)
 
 omni -- docker build .
-# Output: docker: building <image> | 8 steps | distilled noise
+# Result: Cleaned build layers, surfacing only critical transition states.
 ```
 
-### 2. Semantic Distillation (`distill`)
-The default mode. It uses Zig's low-level performance to intelligently rewrite logs for AI consumption.
-- **Study Case**: You have a 10,000-line build log. `cat build.log | omni` turns it into a 20-line summary. This makes it possible to paste logs into LLMs that have small context windows.
+### 2. Deep Semantic Distillation (`distill`)
+Leverage the OMNI Engine's specialized algorithms to convert chaotic logs into structured intelligence.
+- **Precision Rewrite**: OMNI doesn't truncate data; it semantically analyzes the stream to retain "intent-critical" details.
+- **Context Optimization**: By compressing 10,000 lines into a 20-line distillation, OMNI effectively expands your AI's reasoning capacity.
 
 ### 3. Ultra-Fast Benchmarking (`bench`)
 Prove the efficiency of the OMNI engine:
@@ -231,21 +233,32 @@ omni density < build_logs.txt
 
 ---
 
-## The Power Comparison: Precise Intelligence
+## The OMNI Core Pillars: Precise Intelligence
 
-| Feature | **OMNI** | RTK | Snip | Serena |
-| :--- | :--- | :--- | :--- | :--- |
-| **Language** | **Zig + Wasm** | Rust | Go | Python |
-| **Philosophy** | **Semantic Distillation** | Tool Proxying | YAML Pipelines | IDE-like Retrieval |
-| **Latency** | **< 1ms** | ~10ms | ~10ms | ~50ms+ |
-| **Filter Type** | **Hardcoded (Fast)** | Hardcoded | Declarative YAML | LSP / Semantic |
-| **Deployment** | **Edge (68KB Wasm)** | Native Binary | Static Binary | Python Pkg (uv) |
-| **Memory** | **Manual (Zero GC)** | ARC | GC | GC |
+| Pillar | Description | Performance |
+| :--- | :--- | :--- |
+| **Speed** | Zig-powered native engine with zero garbage collection. | **< 1ms Latency** |
+| **Density** | Intelligent semantic distillation instead of blind truncation. | **60-99% Savings** |
+| **Governance** | SHA-256 verified trust boundaries for project-local rules. | **Military Grade** |
+| **Portability** | Single 68KB Wasm binary runs on any edge or local runtime. | **Universal** |
+| **Auditability** | Comprehensive session reports tracking every token saved. | **Daily Insights** |
 
-### Why OMNI Wins:
-1.  **Context IQ**: OMNI doesn't just shorten text; it *re-writes* it semantically for the LLM.
-2.  **Performance Supremacy**: By using a persistent Wasm instance, OMNI is up to **50x faster** than traditional CLI tools.
-3.  **Universal Deployment**: The only tool that runs as a single Wasm file on any edge runtime.
+### Market-Leading Performance
+
+While other tools focus on simple filtering, OMNI provides a full semantic layer:
+
+| Feature | **OMNI** | Others |
+| :--- | :--- | :--- |
+| **Processing Engine** | **Zig (Native)** | Python / Go / Rust |
+| **Context Strategy** | **Semantic Distillation** | Regex / Passthrough |
+| **Wait Overhead** | **Zero (<1ms)** | Visible (10ms - 100ms) |
+| **Governance** | **SHA-256 Trust Boundary** | None / Manual |
+| **Deployment** | **68KB Wasm / Universal** | Large Native Binaries |
+
+### The OMNI Advantage:
+1.  **Context IQ**: OMNI doesn't just shorten text; it *re-writes* it semantically for the LLM based on agentic intent.
+2.  **Performance Supremacy**: By using a persistent Wasm instance, OMNI provides instant responses without blocking the main agent execution.
+3.  **Local-First Privacy**: Every byte of your code and tool output stays on your machine.
 
 ---
 

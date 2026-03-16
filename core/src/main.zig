@@ -127,7 +127,7 @@ fn handleExamples() !void {
         \\📚 OMNI STUDY CASES & EXAMPLES
         \\══════════════════════════════════════════════════════════
         \\
-        \\🔍 1. Git & Code Review
+        \\   1. Git & Code Review
         \\   git diff | omni                     # Clean diff for LLM
         \\   git log -n 5 | omni                 # Dense commit history
         \\   git show HEAD | omni                # Distill single commit noise
@@ -696,7 +696,7 @@ fn handleSetup() !void {
 }
 
 fn handleUpdate(allocator: std.mem.Allocator) !void {
-    try std.fs.File.stdout().deprecatedWriter().print("🔍 Checking for updates...\n", .{});
+    try std.fs.File.stdout().deprecatedWriter().print(" Checking for updates...\n", .{});
 
     const repo_url = "https://api.github.com/repos/fajarhide/omni/releases/latest";
     const result = std.process.Child.run(.{
@@ -728,13 +728,13 @@ fn handleUpdate(allocator: std.mem.Allocator) !void {
         if (std.mem.eql(u8, latest_version, current_version)) {
             try std.fs.File.stdout().deprecatedWriter().print("✨ OMNI is up to date (v{s}).\n", .{current_version});
         } else {
-            try std.fs.File.stdout().deprecatedWriter().print("🚀 A new version of OMNI is available: {s} (current: v{s})\n", .{ latest_tag, current_version });
+            try std.fs.File.stdout().deprecatedWriter().print(" A new version of OMNI is available: {s} (current: v{s})\n", .{ latest_tag, current_version });
 
             // Detect How to Update (Homebrew vs Installer)
             var buffer: [std.fs.max_path_bytes]u8 = undefined;
             if (std.fs.selfExePath(&buffer)) |exe_path| {
                 if (std.mem.indexOf(u8, exe_path, "Cellar") != null or std.mem.indexOf(u8, exe_path, "homebrew") != null) {
-                    try std.fs.File.stdout().deprecatedWriter().print("\nTo update, run:\n  brew upgrade omni\n", .{});
+                    try std.fs.File.stdout().deprecatedWriter().print("\nTo update, run:\n  brew upgrade fajarhide/tap/omni\n", .{});
                 } else {
                     try std.fs.File.stdout().deprecatedWriter().print("\nTo update, run the installer:\n  curl -fsSL https://raw.githubusercontent.com/fajarhide/omni/main/install.sh | sh\n", .{});
                 }
