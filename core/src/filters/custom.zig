@@ -55,8 +55,13 @@ pub const CustomFilter = struct {
             .name = "custom",
             .ptr = self,
             .matchFn = match,
+            .scoreFn = score,
             .processFn = process,
         };
+    }
+
+    fn score(_: *anyopaque, _: []const u8) f32 {
+        return 1.0; // User-defined rules are high-signal
     }
 
     fn match(ptr: *anyopaque, input: []const u8) bool {

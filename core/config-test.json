@@ -1,0 +1,25 @@
+{
+  "dsl_filters": [
+    {
+      "name": "high-signal",
+      "trigger": "SIG_HIGH",
+      "rules": [],
+      "output": "HIGH!",
+      "confidence": 0.9
+    },
+    {
+      "name": "grey-area",
+      "trigger": "SIG_GREY",
+      "rules": [],
+      "output": "GREY!",
+      "confidence": 0.5
+    },
+    {
+      "name": "noise-signal",
+      "trigger": "SIG_NOISE",
+      "rules": [],
+      "output": "NOISE!",
+      "confidence": 0.2
+    }
+  ]
+}

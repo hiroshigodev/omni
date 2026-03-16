@@ -17,6 +17,7 @@ pub const DslFilterConfig = struct {
     trigger: []const u8,
     rules: []DslRule,
     output: []const u8,
+    confidence: f32 = 1.0,
 };
 
 pub const DslEngine = struct {
@@ -42,9 +43,15 @@ pub const DslEngine = struct {
                 .name = f.name,
                 .ptr = f,
                 .matchFn = match,
+                .scoreFn = score,
                 .processFn = process,
             });
         }
+    }
+
+    fn score(ptr: *anyopaque, _: []const u8) f32 {
+        const config: *DslFilterConfig = @ptrCast(@alignCast(ptr));
+        return config.confidence;
     }
 
     fn match(ptr: *anyopaque, input: []const u8) bool {
