@@ -507,8 +507,18 @@ img {
 
 .stat-icon {
   font-size: 2rem;
-  margin-bottom: 16px;
-  display: block;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--accent-purple);
+  filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.3));
+}
+
+.stat-icon svg {
+  width: 40px;
+  height: 40px;
+  stroke-width: 1.5px;
 }
 
 .stat-value {
@@ -566,7 +576,16 @@ img {
 
 .pipeline-node .node-icon {
   font-size: 1.8rem;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  color: var(--accent-cyan);
+}
+
+.pipeline-node .node-icon svg {
+  width: 32px;
+  height: 32px;
+  stroke-width: 1.5px;
 }
 
 .pipeline-node .node-title {
@@ -754,10 +773,18 @@ img {
 .integration-card h3 {
   font-size: 1.15rem;
   font-weight: 700;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  color: var(--text-primary);
+}
+
+.integration-card h3 svg {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-purple);
+  stroke-width: 1.5px;
 }
 
 .integration-card p {

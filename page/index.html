@@ -83,22 +83,30 @@
       </p>
       <div class="stats-grid reveal-children">
         <div class="stat-card">
-          <span class="stat-icon">⚡</span>
+          <span class="stat-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><path d="M4 14.71 14 3.5v9h6l-10 11.21v-9H4Z"/></svg>
+          </span>
           <div class="stat-value gradient-text">&lt; 1ms</div>
           <div class="stat-label">Filter Latency</div>
         </div>
         <div class="stat-card">
-          <span class="stat-icon">🎯</span>
+          <span class="stat-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-target"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </span>
           <div class="stat-value gradient-text">30–90%</div>
           <div class="stat-label">Token Reduction</div>
         </div>
         <div class="stat-card">
-          <span class="stat-icon">📦</span>
+          <span class="stat-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-box"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+          </span>
           <div class="stat-value gradient-text">68 KB</div>
           <div class="stat-label">Wasm Footprint</div>
         </div>
         <div class="stat-card">
-          <span class="stat-icon">🔧</span>
+          <span class="stat-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-2"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+          </span>
           <div class="stat-value gradient-text">Zero</div>
           <div class="stat-label">Configuration Needed</div>
         </div>
@@ -117,7 +125,9 @@
       <div class="pipeline-visual reveal">
         <div class="pipeline-step">
           <div class="pipeline-node">
-            <div class="node-icon">🛠️</div>
+            <div class="node-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-terminal"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+            </div>
             <div class="node-title">Tool Output</div>
             <div class="node-desc">git diff · docker build<br>npm install · SQL queries</div>
           </div>
@@ -125,7 +135,9 @@
         <div class="pipeline-arrow">→</div>
         <div class="pipeline-step">
           <div class="pipeline-node highlight">
-            <div class="node-icon">🌌</div>
+            <div class="node-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cpu"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
+            </div>
             <div class="node-title">OMNI Engine</div>
             <div class="node-desc">Zig Core + Wasm<br>LRU Cache · Semantic Filter</div>
           </div>
@@ -133,7 +145,9 @@
         <div class="pipeline-arrow">→</div>
         <div class="pipeline-step">
           <div class="pipeline-node">
-            <div class="node-icon">✨</div>
+            <div class="node-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="M9.937 15.58a1.012 1.012 0 0 1 1.187.334l.338.477a1.03 1.03 0 0 0 1.674 0l.338-.477a1.012 1.012 0 0 1 1.187-.334l.562.2a1.039 1.039 0 0 0 1.354-1.127l-.093-.58a1.012 1.012 0 0 1 .326-1.19l.481-.34a1.03 1.03 0 0 0 0-1.666l-.481-.34a1.012 1.012 0 0 1-.326-1.19l.093-.58a1.039 1.039 0 0 0-1.354-1.127l-.562.2a1.012 1.012 0 0 1-1.187-.334l-.338-.477a1.03 1.03 0 0 0-1.674 0l-.338.477a1.012 1.012 0 0 1-1.187.334l-.562-.2a1.039 1.039 0 0 0-1.354 1.127l.093.58a1.012 1.012 0 0 1-.326 1.19l-.481.34a1.03 1.03 0 0 0 0 1.666l.481.34a1.012 1.012 0 0 1 .326 1.19l-.093.58a1.039 1.039 0 0 0 1.354 1.127l.562-.2Z"/><path d="M12 7v10"/><path d="M8 12h8"/></svg>
+            </div>
             <div class="node-title">Pure Signal</div>
             <div class="node-desc">30–90% fewer tokens<br>Zero noise, full context</div>
           </div>
@@ -141,7 +155,9 @@
         <div class="pipeline-arrow">→</div>
         <div class="pipeline-step">
           <div class="pipeline-node">
-            <div class="node-icon">🤖</div>
+            <div class="node-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+            </div>
             <div class="node-title">AI Agent</div>
             <div class="node-desc">Claude · Cursor<br>Windsurf · Any MCP client</div>
           </div>
@@ -320,7 +336,10 @@ Step 15/15 : CMD ["node", "server.js"]
       <p class="section-subtitle reveal">OMNI integrates natively with your favorite AI agents via MCP.</p>
       <div class="integration-cards reveal-children">
         <div class="integration-card">
-          <h3>🔌 Claude Code / Claude CLI</h3>
+          <h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plug"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg>
+            Claude Code / Claude CLI
+          </h3>
           <p>Register OMNI as an MCP server automatically. This command detects your absolute path and registers the server for you.</p>
           <div class="code-block">
             <button class="code-copy" data-copy='omni generate claude-code'>Copy</button>
@@ -328,7 +347,10 @@ Step 15/15 : CMD ["node", "server.js"]
           </div>
         </div>
         <div class="integration-card">
-          <h3>🤖 Antigravity (Google)</h3>
+          <h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot-message-square"><path d="M12 6V2h4"/><rect width="16" height="12" x="4" y="6" rx="2"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M15 11v2"/><path d="M9 11v2"/></svg>
+            Antigravity (Google)
+          </h3>
           <p>Fully automated setup. Just run the `omni` CLI, and it will safely patch your `mcp_config.json` without deleting other servers.</p>
           <div class="code-block">
             <button class="code-copy" data-copy='omni generate antigravity'>Copy</button>
@@ -336,7 +358,10 @@ Step 15/15 : CMD ["node", "server.js"]
           </div>
         </div>
         <div class="integration-card">
-          <h3>⚡ One-Line Installer</h3>
+          <h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><path d="M4 14.71 14 3.5v9h6l-10 11.21v-9H4Z"/></svg>
+            One-Line Installer
+          </h3>
           <p>Fastest way to get started — clones, builds the Zig core + Wasm, and sets everything up automatically.</p>
           <div class="code-block">
             <button class="code-copy" data-copy="curl -fsSL https://raw.githubusercontent.com/fajarhide/omni/main/install.sh | sh">Copy</button>
@@ -344,7 +369,10 @@ Step 15/15 : CMD ["node", "server.js"]
           </div>
         </div>
         <div class="integration-card">
-          <h3>🛠️ Pipe Anything</h3>
+          <h3>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-terminal-square"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m7 11 2 2-2 2"/><path d="M11 13h4"/></svg>
+            Pipe Anything
+          </h3>
           <p>OMNI works with any CLI tool — just pipe the output. No filter match? Passes through unchanged with zero overhead.</p>
           <div class="code-block">
             <button class="code-copy" data-copy="git diff | omni distill">Copy</button>
