@@ -74,9 +74,8 @@ graph TD
         D --> E
     end
 
-    A -->|"stdin pipe"| OMNI
+    A -->|"stdin pipe"| B
     E -->|"Pure Signal<br/>Refined Context"| F["AI Agent Platform (Claude/Antigravity/Etc)<br/>Zero Noise reasoning"]
-
 
     %% Theme-agnostic Professional Styling
     style OMNI fill:#1d2b3a,stroke:#334155,stroke-width:2px,color:#f8fafc
@@ -86,6 +85,7 @@ graph TD
     style C fill:#06b6d4,stroke:#22d3ee,color:#fff
     style D fill:#10b981,stroke:#34d399,color:#fff
     style E fill:#f59e0b,stroke:#fbbf24,color:#fff
+    style F fill:#f59e0b,stroke:#fbbf24,color:#fff
 
     %% Link Styling (Arrows)
     linkStyle default stroke:#94a3b8,stroke-width:2px
