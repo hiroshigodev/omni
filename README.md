@@ -56,39 +56,26 @@ OMNI provides a powerful, multi-purpose CLI that consolidates all diagnostic and
 
 OMNI sits between your AI agent and the outside world — silently distilling chaotic output into pure, high-density signal.
 
-```
-                         OMNI SEMANTIC PIPELINE
-  ─────────────────────────────────────────────────────────────
+```mermaid
+graph TD
+    subgraph Output ["Your Tool Output"]
+        A["git diff<br/>docker build<br/>npm install<br/>etc"]
+    end
 
-   Your Tool Output
-  ┌──────────────────┐
-  │  git diff        │   (noisy, verbose, 600+ tokens)
-  │  docker build    │
-  │  npm install     |
-  |  etc             │
-  └────────┬─────────┘
-           │ stdin pipe
-           ▼
-  ┌───────────────────────────────────────────────────────────┐
-  │                    OMNI MCP SERVER                        │
-  │                                                           │
-  │   ┌─────────────┐     ┌─────────────────────────────┐     │
-  │   │ LRU Cache   │────▶│  Filter Engine (Zig + Wasm) │     │
-  │   │  < 1ms hit  │     │  Git · SQL · Docker · Node  │     │
-  │   └─────────────┘     └────────────┬────────────────┘     │
-  │                                    │ Semantic Distill     │
-  │             ┌──────────────────────▼──────────────────┐   │
-  │             │  Pure Signal  (30–90% token reduction)  │   │
-  │             └──────────────────────┬──────────────────┘   │
-  └──────────────────────────────────  │ ─────────────────────┘
-                                       │
-                                       ▼
-                          ┌────────────────────────┐
-                          │   AI Agent (Claude)    │
-                          │   sees only signal,    │
-                          │   zero noise           │
-                          └────────────────────────┘
+    subgraph OMNI ["OMNI MCP SERVER"]
+        direction TB
+        B["LRU Cache<br/>&lt; 1ms hit"]
+        C["Filter Engine (Zig + Wasm)<br/>Git · SQL · Docker · Node"]
+        D["Pure Signal<br/>(30–90% token reduction)"]
+        
+        B --> C
+        C -->|"Semantic Distill"| D
+    end
 
+    A -->|"stdin pipe"| OMNI
+    D --> E["AI Agent (Claude)<br/>sees only signal,<br/>zero noise"]
+
+    style OMNI fill:#f9f9f9,stroke:#333,stroke-width:2px
 ```
 ---
 **No filter match** → passthrough unchanged (zero overhead)

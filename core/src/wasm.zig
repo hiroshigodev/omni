@@ -26,20 +26,33 @@ var global_dsl_engine: ?*DslEngine = null;
 
 export fn init_engine() bool {
     if (global_filters != null) return true;
-    
+    return init_engine_with_config(null, 0);
+}
+
+export fn init_engine_with_config(config_ptr: ?[*]u8, config_len: usize) bool {
+    if (global_filters != null) return true;
+
     var filters = std.ArrayList(Filter).empty;
+    errdefer filters.deinit(allocator);
+
     filters.append(allocator, GitFilter.filter()) catch return false;
     filters.append(allocator, BuildFilter.filter()) catch return false;
     filters.append(allocator, DockerFilter.filter()) catch return false;
     filters.append(allocator, SqlFilter.filter()) catch return false;
     filters.append(allocator, NodeFilter.filter()) catch return false;
 
-    // Load Config (Custom Rules & DSL Filters)
-    const content = std.fs.cwd().readFileAlloc(allocator, "omni_config.json", 1024 * 64) catch null;
-    if (content) |raw_json| {
-        defer allocator.free(raw_json);
-        
-        // Load Legacy/Custom Rules
+    var config_content: ?[]const u8 = null;
+
+    if (config_ptr) |ptr| {
+        config_content = ptr[0..config_len];
+    } else {
+        if (std.fs.cwd().readFileAlloc(allocator, "omni_config.json", 1024 * 1024)) |content| {
+            config_content = content;
+        } else |_| {}
+    }
+
+    if (config_content) |raw_json| {
+        // Load Legacy Custom Rules
         if (CustomFilter.initFromContent(allocator, raw_json)) |custom| {
             global_custom_filter = custom;
             filters.append(allocator, custom.filter()) catch {};
@@ -48,7 +61,6 @@ export fn init_engine() bool {
         // Load DSL Filters
         const FullConfig = struct { dsl_filters: []DslFilterConfig = &[_]DslFilterConfig{} };
         if (std.json.parseFromSlice(FullConfig, allocator, raw_json, .{ .ignore_unknown_fields = true })) |parsed| {
-            defer parsed.deinit();
             if (DslEngine.init(allocator, parsed.value.dsl_filters)) |engine| {
                 global_dsl_engine = engine;
                 _ = engine.getFilters(&filters) catch {};

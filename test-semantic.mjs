@@ -25,7 +25,7 @@ async function runTest() {
     const { instance } = await WebAssembly.instantiate(wasmBuffer, importObject);
     wasi.start(instance);
 
-    const { alloc, free, compress, init_engine, memory } = instance.exports;
+    const { alloc, free, compress, init_engine, init_engine_with_config, memory } = instance.exports;
 
     function writeString(str) {
         const bytes = Buffer.from(str);
@@ -42,23 +42,50 @@ async function runTest() {
         return Buffer.from(bytes).toString();
     }
 
-    const configPath = join(__dirname, 'omni_config.json');
-    const backupPath = join(__dirname, 'omni_config.json.bak');
-    const baseConfigOrigin = join(__dirname, 'core/omni_config.json');
+    const configPath = join(__dirname, 'core/omni_config.json');
+    const backupPath = join(__dirname, 'core/omni_config.json.bak');
 
+    const testConfig = {
+        dsl_filters: [
+            {
+                name: "high-signal",
+                trigger: "SIG_HIGH:",
+                confidence: 1.0,
+                rules: [{ capture: "SIG_HIGH: {data}", action: "keep" }],
+                output: "HIGH!"
+            },
+            {
+                name: "grey-area",
+                trigger: "SIG_GREY:",
+                confidence: 0.5,
+                rules: [{ capture: "SIG_GREY: {data}", action: "keep" }],
+                output: "GREY!"
+            },
+            {
+                name: "noise-signal",
+                trigger: "SIG_NOISE:",
+                confidence: 0.2,
+                rules: [{ capture: "SIG_NOISE: {data}", action: "keep" }],
+                output: "NOISE!"
+            }
+        ]
+    };
+
+    let failed = false;
     try {
         console.log("Setting up test environment...");
         
-        if (!fs.existsSync(configPath) && fs.existsSync(baseConfigOrigin)) {
-            fs.copyFileSync(baseConfigOrigin, configPath);
-        }
-
+        // Backup original config if exists
         if (fs.existsSync(configPath)) {
             fs.renameSync(configPath, backupPath);
         }
 
+        // Write test-specific config
+        fs.writeFileSync(configPath, JSON.stringify(testConfig, null, 2));
+
         console.log("Initializing OMNI engine...");
-        init_engine();
+        const { ptr: configPtr, len: configLen } = writeString(JSON.stringify(testConfig));
+        init_engine_with_config(configPtr, configLen);
 
         const testCases = [
             { label: 'HIGH SIGNAL (>0.8)', input: 'SIG_HIGH: data', expected: 'HIGH!' },
@@ -80,6 +107,7 @@ async function runTest() {
             } else {
                 console.log(`❌ FAIL: ${tc.label}`);
                 console.log(`   Expected: ${tc.expected}`);
+                failed = true;
             }
         }
 
@@ -89,7 +117,11 @@ async function runTest() {
             if (fs.existsSync(configPath)) fs.unlinkSync(configPath);
             fs.renameSync(backupPath, configPath);
         }
+        if (failed) process.exit(1);
     }
 }
 
-runTest().catch(console.error);
+runTest().catch((err) => {
+    console.error(err);
+    process.exit(1);
+});

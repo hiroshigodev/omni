@@ -60,7 +60,7 @@ test:
 # Phase 3: System Reporting
 report:
 	@echo "Generating System Report..."
-	@./bin/omni report || { echo "✗ System report failed"; exit 1; }
+	@core/zig-out/bin/omni report || { echo "✗ System report failed"; exit 1; }
 
 # Phase 4: Integrity Verification (Full Suite)
 verify: check-version build test report
