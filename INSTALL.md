@@ -29,10 +29,11 @@ If you prefer to install manually:
    ```
 
 2. **Compile OMNI**:
-   OMNI uses the standard Zig build system. Build native CLI + Wasm Edge.
+   The project uses a `Makefile` to simplify the build process.
    ```bash
-   zig build -Doptimize=ReleaseFast -p 
+   make build
    ```
+   *This compiles both the native Zig CLI, the Wasm engine, and the TypeScript MCP server.*
 
 3. **Verify via Native CLI**:
    ```bash

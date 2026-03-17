@@ -45,7 +45,6 @@ async function runTest() {
     const configPath = join(__dirname, 'omni_config.json');
     const backupPath = join(__dirname, 'omni_config.json.bak');
     const baseConfigOrigin = join(__dirname, 'core/omni_config.json');
-    const testConfigPath = join(__dirname, 'core/config-test.json');
 
     try {
         console.log("Setting up test environment...");
@@ -57,7 +56,6 @@ async function runTest() {
         if (fs.existsSync(configPath)) {
             fs.renameSync(configPath, backupPath);
         }
-        fs.copyFileSync(testConfigPath, configPath);
 
         console.log("Initializing OMNI engine...");
         init_engine();

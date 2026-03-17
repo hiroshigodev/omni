@@ -24,19 +24,19 @@ for (const arg of process.argv) {
   }
 }
 
-// Telemetry Logic
-const TELEMETRY_FILE = path.join(os.homedir(), ".omni", "telemetry.csv");
+// Local Metrics Logic
+const METRICS_FILE = path.join(os.homedir(), ".omni", "metrics.csv");
 
-async function logTelemetry(inputLen: number, outputLen: number, ms: number) {
+async function logMetrics(inputLen: number, outputLen: number, ms: number) {
   try {
     const timestamp = Math.floor(Date.now() / 1000);
     const line = `${timestamp},${currentAgent},${inputLen},${outputLen},${Math.round(ms)}\n`;
     
     // Ensure .omni directory exists
-    const dir = path.dirname(TELEMETRY_FILE);
+    const dir = path.dirname(METRICS_FILE);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
-    await fs.promises.appendFile(TELEMETRY_FILE, line);
+    await fs.promises.appendFile(METRICS_FILE, line);
   } catch (e) {
     // Ignore logging errors to remain transparent
   }
@@ -130,7 +130,7 @@ async function distillText(text: string): Promise<string> {
   const startTime = performance.now();
   const cached = cache.get(text);
   if (cached) {
-    await logTelemetry(text.length, cached.length, performance.now() - startTime);
+    await logMetrics(text.length, cached.length, performance.now() - startTime);
     return cached;
   }
 
@@ -164,7 +164,7 @@ async function distillText(text: string): Promise<string> {
   cache.set(text, trimmed);
   
   const elapsed = performance.now() - startTime;
-  await logTelemetry(text.length, trimmed.length, elapsed);
+  await logMetrics(text.length, trimmed.length, elapsed);
   
   return trimmed;
 }

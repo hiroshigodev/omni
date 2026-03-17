@@ -16,7 +16,7 @@ bin/*
 *.log
 actual_stdout.txt
 test-*.js
-
+omni*.json
 # --- Environment & Configuration ---
 .env
 .env.*
