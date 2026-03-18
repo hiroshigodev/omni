@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.4.2] - 2026-03-18
 
 ### Added
+- **Custom DSL Rules**: Activated and fully integrated custom token-reduction DSL rules in the main semantic engine.
+
+### Fixed
+- **DSL Engine Stability**: Fixed a critical `use-after-free` segmentation fault in the JSON config parser by explicitly allocating memory for config string slices.
+- **Filter Precedence**: Ensured user-defined rules from `omni_config.json` correctly take priority over built-in internal core filters.
+- **CLI Output Cleanliness**: Removed stray debug prints in the compressor pipeline.
+
+## [0.3.9] - 2026-03-16
+
+### Added
 - **`omni uninstall`**: Clean removal of `~/.omni` directory and automatic cleanup of MCP configs from Antigravity, Claude Code CLI, and Claude Desktop.
 - **Custom DSL Rules**: Activated and fully integrated custom token-reduction DSL rules configurable via `omni_config.json`.
 - **Semantic Confidence Scoring**: Dynamic compression strategies based on filter confidence.
