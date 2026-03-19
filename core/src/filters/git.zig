@@ -12,8 +12,13 @@ pub const GitFilter = struct {
         };
     }
 
-    fn score(_: *anyopaque, _: []const u8) f32 {
-        return 1.0; // Git status is high-signal
+    fn score(_: *anyopaque, input: []const u8) f32 {
+        var signals: f32 = 0.0;
+        if (std.mem.indexOf(u8, input, "On branch") != null) signals += 3.0;
+        if (std.mem.indexOf(u8, input, "nothing to commit") != null) signals += 3.0;
+        if (std.mem.indexOf(u8, input, "modified:") != null) signals += 2.0;
+        if (std.mem.indexOf(u8, input, "Untracked") != null) signals += 1.0;
+        return @min(1.0, signals / 6.0);
     }
 
     fn match(_: *anyopaque, input: []const u8) bool {
