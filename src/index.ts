@@ -7,13 +7,14 @@ import {
 import fs from "fs";
 import path from "path";
 import { promisify } from "util";
-import { exec } from "child_process";
+import { exec, execFile } from "child_process";
 import { fileURLToPath } from "url";
 import { WASI } from "wasi";
 import { LRUCache } from "./cache.js";
 import os from "os";
 
 const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Parse Agent Argument (--agent=claude-code)
@@ -197,27 +198,32 @@ async function distillText(text: string): Promise<string> {
   
   if (!inputPtr) throw new Error("Wasm allocation failed");
 
-  const memView = new Uint8Array(memory.buffer);
-  memView.set(inputBytes, inputPtr);
+  let resultPtr = 0;
+  let resultLen = 0;
 
-  // Call compress: returns struct { ptr, len }
-  const resultRaw = exports.compress(inputPtr, inputBytes.length);
-  const resultPtr = Number(BigInt(resultRaw) & 0xFFFFFFFFn);
-  const resultLen = Number(BigInt(resultRaw) >> 32n);
+  try {
+    const memView = new Uint8Array(memory.buffer);
+    memView.set(inputBytes, inputPtr);
 
-  const outputBytes = new Uint8Array(memory.buffer, resultPtr, resultLen);
-  const output = decoder.decode(outputBytes);
+    // Call compress: returns struct { ptr, len }
+    const resultRaw = exports.compress(inputPtr, inputBytes.length);
+    resultPtr = Number(BigInt(resultRaw) & 0xFFFFFFFFn);
+    resultLen = Number(BigInt(resultRaw) >> 32n);
 
-  exports.free(inputPtr, inputBytes.length);
-  exports.free(resultPtr, resultLen);
+    const outputBytes = new Uint8Array(memory.buffer, resultPtr, resultLen);
+    const output = decoder.decode(outputBytes);
 
-  const trimmed = output.trim();
-  cache.set(text, trimmed);
-  
-  const elapsed = performance.now() - startTime;
-  await logMetrics(text.length, trimmed.length, elapsed);
-  
-  return trimmed;
+    const trimmed = output.trim();
+    cache.set(text, trimmed);
+    
+    const elapsed = performance.now() - startTime;
+    await logMetrics(text.length, trimmed.length, elapsed);
+    
+    return trimmed;
+  } finally {
+    exports.free(inputPtr, inputBytes.length);
+    if (resultPtr) exports.free(resultPtr, resultLen);
+  }
 }
 
 server.setRequestHandler(ListToolsRequestSchema, async () => {
@@ -497,7 +503,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
          if (isRegex) flags.push("-E");
 
          try {
-            const { stdout, stderr } = await execAsync(`grep ${flags.join(" ")} "${query.replace(/"/g, '\\"')}" "${targetPath}"`);
+            const { stdout, stderr } = await execFileAsync('grep', [...flags, query, targetPath]);
             let resultOutput = String(stdout);
             if (!resultOutput.trim()) resultOutput = "No matches found.";
             
@@ -519,7 +525,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
          
          try {
              // Basic find command
-             const { stdout } = await execAsync(`find "${dir}" -name "${pattern.replace(/"/g, '\\"')}"`);
+             const { stdout } = await execFileAsync('find', [dir, '-name', pattern]);
              const files = String(stdout).split("\n").filter(Boolean);
              const resultOutput = files.join(", ");
              const distilled = await distillText(resultOutput || "No files found.");

@@ -22,7 +22,16 @@ pub const DockerFilter = struct {
     }
 
     fn match(_: *anyopaque, input: []const u8) bool {
-        return std.mem.indexOf(u8, input, "Step ") != null or std.mem.indexOf(u8, input, "CACHED") != null;
+        const has_step = std.mem.indexOf(u8, input, "Step ") != null;
+        const has_cached = std.mem.indexOf(u8, input, "CACHED") != null;
+        
+        if (!has_step and !has_cached) return false;
+        
+        return std.mem.indexOf(u8, input, "FROM ") != null or
+               std.mem.indexOf(u8, input, "RUN ") != null or
+               std.mem.indexOf(u8, input, "COPY ") != null or
+               std.mem.indexOf(u8, input, "Successfully built") != null or
+               std.mem.indexOf(u8, input, "Successfully tagged") != null;
     }
 
     fn process(_: *anyopaque, allocator: std.mem.Allocator, input: []const u8) ![]u8 {
