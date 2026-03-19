@@ -259,6 +259,24 @@ You can manually edit these files to define `rules` (exact matching) or `dsl_fil
 
 ---
 
+## Security: Hook Integrity Workflow
+
+OMNI provides a **Trust Boundary** by ensuring that any hook scripts executed through the system remain untampered.
+
+1.  **Add Hooks**: Place your custom scripts in the `~/.omni/hooks/` directory.
+2.  **Verify & Trust**: Use the `omni_trust` MCP tool to manually inspect and approve the scripts. This generates SHA-256 signatures in `~/.omni/hooks.sha256`.
+3.  **Startup Protection**: Every time the OMNI MCP server starts, it re-calculates hashes and compares them to the trusted signatures.
+4.  **Automatic Lockdown**: If any file is modified or an untrusted file is added, OMNI will log a security alert and **immediately exit** to prevent execution of tampered logic.
+
+To manually audit your hook integrity, you can run:
+```bash
+node dist/index.js --test-integrity
+```
+
+[SEE SECURITY.md](SECURITY.md) FOR MORE DETAILS
+
+---
+
 ## Performance Monitoring & Metrics
 
 OMNI is obsessed with efficiency. Use these tools to see how much you're saving:
