@@ -28,14 +28,14 @@ pub const SqlFilter = struct {
         errdefer result.deinit(allocator);
 
         var in_comment: bool = false;
-        var it = std.mem.splitScalar(u8, input, ' ');
+        var it = std.mem.splitAny(u8, input, "\n\r");
         
         while (it.next()) |word| {
             if (word.len == 0) continue;
             
             if (std.mem.startsWith(u8, word, "--")) {
                 // Ignore the rest of the input for this line-based distillation
-                break;
+                continue;
             }
 
             if (std.mem.startsWith(u8, word, "/*")) {
