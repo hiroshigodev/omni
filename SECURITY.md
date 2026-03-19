@@ -33,6 +33,9 @@ We take the security of OMNI seriously. If you discover a vulnerability, please 
 3. **Auto-Verification**: Every time OMNI starts, it compares the current scripts' fingerprints with the trusted records.
 4. **Lockdown**: If any script is modified without approval or a new suspicious script is detected, OMNI will refuse to start to protect your system.
 
+> [!IMPORTANT]
+> **Updating Trusted Scripts**: Any modification to a hook script's content changes its SHA-256 hash. If you update your hooks, you must re-run the `omni_trust` tool to update the `hooks.sha256` file with the new fingerprints.
+
 ```mermaid
 sequenceDiagram
     participant U as User/Admin
