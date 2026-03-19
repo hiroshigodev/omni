@@ -2,7 +2,7 @@ class Omni < Formula
   desc "Semantic Distillation Engine for the Agentic AI"
   homepage "https://github.com/fajarhide/omni"
   url "https://github.com/fajarhide/omni/archive/refs/tags/v0.4.4.tar.gz"
-  sha256 "899b3586ee9df92a98ca9523ecc197084d35b898bcf1b056b21675c3a1e83c45"
+  sha256 "8f2a13d4b403c0156b129f966da23f6cdfa6f5f5ce47af4bb3a37e23f5b7b31f"
   license "MIT"
 
   depends_on "zig" => :build
