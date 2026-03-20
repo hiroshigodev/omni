@@ -15,7 +15,20 @@ pub const CatFilter = struct {
     fn score(_: *anyopaque, input: []const u8) f32 {
         // If it looks like a document with headers, give it high confidence.
         if (std.mem.indexOf(u8, input, "\n# ") != null or std.mem.startsWith(u8, input, "# ")) return 0.85;
-        // Default catch-all score should be just above the noise threshold (0.3).
+        
+        // Count lines to distinguish between a small noise snippet and a real "cat" output.
+        var line_count: usize = 0;
+        var it = std.mem.splitAny(u8, input, "\n\r");
+        while (it.next()) |_| {
+            line_count += 1;
+            if (line_count > 1) break;
+        }
+
+        // If it's just a single short line and no headers, give it very low confidence.
+        // This allows specialized filters (even low-confidence "noise" ones) to take precedence.
+        if (line_count <= 1 and input.len < 100) return 0.1;
+
+        // Default catch-all score for multi-line or longer raw content.
         return 0.35;
     }
 
